@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Avatar from 'material-ui/Avatar'
 import Linkify from 'linkifyjs/react'
 import { shell } from 'electron'
+import { withStyles } from 'material-ui/styles'
 
 const isRetweet = (tweet) => {
   return tweet.hasOwnProperty('retweeted_status')
@@ -23,7 +24,28 @@ const linkifyOptions = {
   }
 }
 
-export default class Tweet extends Component {
+const styles = {
+  root: {
+    display: 'flex',
+    padding: '0.5em 0.25em',
+    borderBottom: '1px solid #f7f7f7'
+  },
+  icon: {
+    flex: '0 0 auto',
+    paddingRight: '0.5em'
+  },
+  body: {
+    flex: '1 1 auto',
+    minWidth: 0
+  },
+  name: {
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis'
+  }
+}
+
+class Tweet extends Component {
   render () {
     const status = isRetweet(this.props.tweet) ? this.props.tweet.retweeted_status : this.props.tweet
     const media = status.entities.media || []
@@ -32,15 +54,17 @@ export default class Tweet extends Component {
     })
 
     return (
-      <div>
-        <div>
+      <div className={this.props.classes.root}>
+        <div className={this.props.classes.icon}>
           <Avatar src={status.user.profile_image_url_https} />
-          {`${status.user.name}@${status.user.screen_name}`}
         </div>
 
-        <Linkify options={linkifyOptions} onClick={handleLink}>
-          {status.text}
-        </Linkify>
+        <div className={this.props.classes.body}>
+          <div className={this.props.classes.name}>{`${status.user.name}@${status.user.screen_name}`}</div>
+          <Linkify options={linkifyOptions} onClick={handleLink}>
+            {status.text}
+          </Linkify>
+        </div>
       </div>
     )
   }
@@ -49,3 +73,5 @@ export default class Tweet extends Component {
 Tweet.propTypes = {
   tweets: PropTypes.array.isRequired
 }
+
+export default withStyles(styles)(Tweet)
