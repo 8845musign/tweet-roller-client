@@ -46,6 +46,10 @@ const styles = {
 }
 
 class Tweet extends Component {
+  shouldComponentUpdate (nextProps) {
+    return this.props.tweet.id !== nextProps.tweet.id
+  }
+
   render () {
     const status = isRetweet(this.props.tweet) ? this.props.tweet.retweeted_status : this.props.tweet
     const media = status.entities.media || []
