@@ -4,6 +4,7 @@ import Avatar from 'material-ui/Avatar'
 import Linkify from 'linkifyjs/react'
 import { shell } from 'electron'
 import { withStyles } from 'material-ui/styles'
+import Typography from 'material-ui/Typography'
 
 const isRetweet = (tweet) => {
   return tweet.hasOwnProperty('retweeted_status')
@@ -50,6 +51,18 @@ class Tweet extends Component {
     return this.props.tweet.id !== nextProps.tweet.id
   }
 
+  renderRetweetInfo () {
+    if (isRetweet(this.props.tweet)) {
+      return (
+        <Typography type="caption">
+          retweet {`${this.props.tweet.user.name}`}
+        </Typography>
+      )
+    } else {
+      return null
+    }
+  }
+
   render () {
     const status = isRetweet(this.props.tweet) ? this.props.tweet.retweeted_status : this.props.tweet
     const media = status.entities.media || []
@@ -64,6 +77,7 @@ class Tweet extends Component {
         </div>
 
         <div className={this.props.classes.body}>
+          {this.renderRetweetInfo()}
           <div className={this.props.classes.name}>{`${status.user.name}@${status.user.screen_name}`}</div>
           <Linkify options={linkifyOptions} onClick={handleLink}>
             {status.text}
