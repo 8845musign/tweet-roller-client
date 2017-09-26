@@ -6,8 +6,10 @@ import { shell } from 'electron'
 import { withStyles } from 'material-ui/styles'
 import Typography from 'material-ui/Typography'
 import Icon from 'material-ui/Icon'
+import IconButton from 'material-ui/IconButton'
 
 import Favorite from './Favorite'
+import ToolButton from './ToolButton'
 
 const isRetweet = (tweet) => {
   return tweet.hasOwnProperty('retweeted_status')
@@ -96,11 +98,15 @@ class Tweet extends Component {
           </div>
 
           <div>
-            <Typography type="caption">
-              <Icon>chat_bubble_outline</Icon>
-              <Favorite active={status.favorited} id={status.id_str} />
-              <Icon>autorenew</Icon>
-            </Typography>
+            <ToolButton aria-label="reply" size={17}>
+            chat_bubble_outline
+            </ToolButton>
+
+            <Favorite active={status.favorited} id={status.id_str} />
+
+            <ToolButton aria-label="retweet">
+            autorenew
+            </ToolButton>
           </div>
         </div>
       </div>

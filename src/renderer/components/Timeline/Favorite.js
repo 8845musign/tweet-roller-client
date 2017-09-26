@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Icon from 'material-ui/Icon'
 import TwitterService from '../../services/twitter'
-
+import ToolButton from './ToolButton'
 export default class Favorite extends React.Component {
   constructor (props) {
     super(props)
@@ -28,7 +27,9 @@ export default class Favorite extends React.Component {
     const icon = this.state.active ? 'star' : 'star_border'
 
     return (
-      <Icon onClick={this.handleClick}>{icon}</Icon>
+      <ToolButton aria-label="favorite" onClick={this.handleClick}>
+        {icon}
+      </ToolButton>
     )
   }
 }
