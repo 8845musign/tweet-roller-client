@@ -5,10 +5,9 @@ import Linkify from 'linkifyjs/react'
 import { shell } from 'electron'
 import { withStyles } from 'material-ui/styles'
 import Typography from 'material-ui/Typography'
-import Icon from 'material-ui/Icon'
-import IconButton from 'material-ui/IconButton'
 
 import Favorite from './Favorite'
+import Retweet from './Retweet'
 import ToolButton from './ToolButton'
 
 const isRetweet = (tweet) => {
@@ -104,9 +103,7 @@ class Tweet extends Component {
 
             <Favorite active={status.favorited} id={status.id_str} />
 
-            <ToolButton aria-label="retweet">
-            autorenew
-            </ToolButton>
+            <Retweet active={status.retweeted} id={status.id_str} />
           </div>
         </div>
       </div>

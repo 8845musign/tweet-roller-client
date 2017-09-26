@@ -27,6 +27,14 @@ class TwitterService {
     const params = { id }
     return this.twit.post('favorites/create', params)
   }
+
+  postRetweet (id) {
+    return this.twit.post(`statuses/retweet/${id}`)
+  }
+
+  postUnRetweet (id) {
+    return this.twit.post(`statuses/unretweet/${id}`)
+  }
 }
 
 export default new TwitterService()
