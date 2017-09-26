@@ -22,6 +22,11 @@ class TwitterService {
     const params = { status }
     return this.twit.post('statuses/update', params)
   }
+
+  postFavorite (id) {
+    const params = { id }
+    return this.twit.post('favorites/create', params)
+  }
 }
 
 export default new TwitterService()

@@ -7,6 +7,8 @@ import { withStyles } from 'material-ui/styles'
 import Typography from 'material-ui/Typography'
 import Icon from 'material-ui/Icon'
 
+import Favorite from './Favorite'
+
 const isRetweet = (tweet) => {
   return tweet.hasOwnProperty('retweeted_status')
 }
@@ -30,7 +32,9 @@ const styles = {
   root: {
     display: 'flex',
     padding: '0.5em 0.25em',
-    borderBottom: '1px solid #f7f7f7'
+    borderBottom: '1px solid #f7f7f7',
+    fontSize: 12,
+    lineHeight: 1.5
   },
   icon: {
     flex: '0 0 auto',
@@ -40,10 +44,14 @@ const styles = {
     flex: '1 1 auto',
     minWidth: 0
   },
+  bodyText: {
+    marginBottom: '0.25em'
+  },
   name: {
     overflow: 'hidden',
     whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
+    marginBottom: '0.25em'
   }
 }
 
@@ -80,14 +88,17 @@ class Tweet extends Component {
         <div className={this.props.classes.body}>
           {this.renderRetweetInfo()}
           <div className={this.props.classes.name}>{`${status.user.name}@${status.user.screen_name}`}</div>
-          <Linkify options={linkifyOptions} onClick={handleLink}>
-            {status.text}
-          </Linkify>
+
+          <div className={this.props.classes.bodyText}>
+            <Linkify options={linkifyOptions} onClick={handleLink}>
+              {status.text}
+            </Linkify>
+          </div>
 
           <div>
             <Typography type="caption">
               <Icon>chat_bubble_outline</Icon>
-              <Icon>star_border</Icon>
+              <Favorite active={status.favorited} id={status.id_str} />
               <Icon>autorenew</Icon>
             </Typography>
           </div>
