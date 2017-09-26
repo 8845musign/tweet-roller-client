@@ -31,8 +31,14 @@ const linkifyOptions = {
 
 const styles = {
   root: {
+    padding: '0.5em 0.25em'
+  },
+  retweet: {
+    paddingLeft: 48,
+    marginBottom: '0.25em'
+  },
+  tweet: {
     display: 'flex',
-    padding: '0.5em 0.25em',
     borderBottom: '1px solid #f7f7f7',
     fontSize: 12,
     lineHeight: 1.5
@@ -63,10 +69,13 @@ class Tweet extends Component {
 
   renderRetweetInfo () {
     if (isRetweet(this.props.tweet)) {
+      const { classes } = this.props
       return (
-        <Typography type="caption">
-          retweet {`${this.props.tweet.user.name}`}
-        </Typography>
+        <div className={classes.retweet}>
+          <Typography type="caption">
+            retweet {`${this.props.tweet.user.name}`}
+          </Typography>
+        </div>
       )
     } else {
       return null
@@ -80,30 +89,35 @@ class Tweet extends Component {
       return item.type === 'photo'
     })
 
+    const { classes } = this.props
+
     return (
-      <div className={this.props.classes.root}>
-        <div className={this.props.classes.icon}>
-          <Avatar src={status.user.profile_image_url_https} />
-        </div>
+      <div className={classes.root}>
+        {this.renderRetweetInfo()}
 
-        <div className={this.props.classes.body}>
-          {this.renderRetweetInfo()}
-          <div className={this.props.classes.name}>{`${status.user.name}@${status.user.screen_name}`}</div>
-
-          <div className={this.props.classes.bodyText}>
-            <Linkify options={linkifyOptions} onClick={handleLink}>
-              {status.text}
-            </Linkify>
+        <div className={classes.tweet}>
+          <div className={classes.icon}>
+            <Avatar src={status.user.profile_image_url_https} />
           </div>
 
-          <div>
-            <ToolButton aria-label="reply" size={17}>
-            chat_bubble_outline
-            </ToolButton>
+          <div className={classes.body}>
+            <div className={classes.name}>{`${status.user.name}@${status.user.screen_name}`}</div>
 
-            <Favorite active={status.favorited} id={status.id_str} />
+            <div className={classes.bodyText}>
+              <Linkify options={linkifyOptions} onClick={handleLink}>
+                {status.text}
+              </Linkify>
+            </div>
 
-            <Retweet active={status.retweeted} id={status.id_str} />
+            <div>
+              <ToolButton aria-label="reply" size={17}>
+              chat_bubble_outline
+              </ToolButton>
+
+              <Favorite active={status.favorited} id={status.id_str} />
+
+              <Retweet active={status.retweeted} id={status.id_str} />
+            </div>
           </div>
         </div>
       </div>
@@ -112,7 +126,8 @@ class Tweet extends Component {
 }
 
 Tweet.propTypes = {
-  tweets: PropTypes.array.isRequired
+  tweets: PropTypes.array.isRequired,
+  classes: PropTypes.string.isRequired
 }
 
 export default withStyles(styles)(Tweet)
