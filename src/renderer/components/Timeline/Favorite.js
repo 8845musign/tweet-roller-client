@@ -27,7 +27,7 @@ export default class Favorite extends React.Component {
     const icon = this.state.active ? 'star' : 'star_border'
 
     return (
-      <ToolButton aria-label="favorite" onClick={this.handleClick}>
+      <ToolButton ariaLabel="favorite" onClick={this.handleClick}>
         {icon}
       </ToolButton>
     )
