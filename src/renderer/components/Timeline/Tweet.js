@@ -5,6 +5,7 @@ import Linkify from 'linkifyjs/react'
 import { shell } from 'electron'
 import { withStyles } from 'material-ui/styles'
 import Typography from 'material-ui/Typography'
+import Icon from 'material-ui/Icon'
 
 const isRetweet = (tweet) => {
   return tweet.hasOwnProperty('retweeted_status')
@@ -82,6 +83,14 @@ class Tweet extends Component {
           <Linkify options={linkifyOptions} onClick={handleLink}>
             {status.text}
           </Linkify>
+
+          <div>
+            <Typography type="caption">
+              <Icon>chat_bubble_outline</Icon>
+              <Icon>star_border</Icon>
+              <Icon>autorenew</Icon>
+            </Typography>
+          </div>
         </div>
       </div>
     )

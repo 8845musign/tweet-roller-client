@@ -28,11 +28,7 @@ class Tweet extends Component {
     if (e.shiftKey && e.key === 'Enter') {
       e.preventDefault()
 
-      const params = {
-        status: this.state.value.trim()
-      }
-
-      TwitterService.post('statuses/update', params)
+      TwitterService.postTweet(this.state.value.trim())
         .catch(error => console.log(error))
         .then(result => this.setState({ value: '' }))
     }

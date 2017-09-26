@@ -9,7 +9,7 @@ import Timeline from './Timeline'
 
 export default class MainContent extends Component {
   componentDidMount () {
-    TwitterService.get('statuses/home_timeline')
+    TwitterService.getHomeTimeline()
       .catch(error => {
         console.log(error)
       })
@@ -20,7 +20,7 @@ export default class MainContent extends Component {
   }
 
   connectStream () {
-    const stream = TwitterService.stream('user')
+    const stream = TwitterService.connectStreamUser()
 
     stream.on('error', error => {
       throw error
