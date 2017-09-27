@@ -54,6 +54,12 @@ const styles = {
   bodyText: {
     marginBottom: '0.25em'
   },
+  image: {
+    marginTop: '0.25em',
+    maxWidth: '100%',
+    height: 'auto',
+    borderRadius: 2
+  },
   name: {
     overflow: 'hidden',
     whiteSpace: 'nowrap',
@@ -75,6 +81,20 @@ class Tweet extends Component {
           <Typography type="caption">
             retweet {`${this.props.tweet.user.name}`}
           </Typography>
+        </div>
+      )
+    } else {
+      return null
+    }
+  }
+
+  renderImage (imageObj) {
+    const { classes } = this.props
+
+    if (imageObj) {
+      return (
+        <div>
+          <img src={imageObj.media_url_https} className={classes.image} />
         </div>
       )
     } else {
@@ -107,6 +127,8 @@ class Tweet extends Component {
               <Linkify options={linkifyOptions} onClick={handleLink}>
                 {status.text}
               </Linkify>
+
+              {this.renderImage(firstImage)}
             </div>
 
             <div>
