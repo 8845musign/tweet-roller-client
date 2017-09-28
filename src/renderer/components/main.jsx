@@ -1,6 +1,5 @@
 import React, { Component } from 'React'
 import TwitterService from '../services/twitter'
-import Typography from 'material-ui/Typography'
 import Tabs, { Tab } from 'material-ui/Tabs'
 import PhoneIcon from 'material-ui-icons/Phone'
 
