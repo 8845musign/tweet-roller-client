@@ -1,8 +1,8 @@
 import React, { Component } from 'React'
 import TwitterService from '../services/twitter'
-import AppBar from 'material-ui/AppBar'
-import Toolbar from 'material-ui/Toolbar'
 import Typography from 'material-ui/Typography'
+import Tabs, { Tab } from 'material-ui/Tabs'
+import PhoneIcon from 'material-ui-icons/Phone'
 
 import Tweet from './Tweet'
 import Timeline from './Timeline'
@@ -27,16 +27,7 @@ export default class MainContent extends Component {
     })
 
     stream.on('tweet', tweet => {
-      console.log('here')
-      console.log(tweet)
       const { tweets } = this.state
-
-      console.log(
-        [
-          tweet,
-          ...tweets
-        ]
-      )
 
       this.setState({
         tweets: [
@@ -47,25 +38,37 @@ export default class MainContent extends Component {
     })
   }
 
+  handleChangeTab (event, value) {
+    this.setState({
+      tab: value
+    })
+  }
+
   constructor (props) {
     super(props)
 
-    this.state = { tweets: [] }
+    this.state = {
+      tweets: [],
+      tab: 0
+    }
+
+    this.handleChangeTab = this.handleChangeTab.bind(this)
   }
 
   render () {
     return (
       <div>
-        <AppBar
-          position="fixed"
-          title="Tweet Roller"
+        <Tabs
+          value={this.state.tab}
+          onChange={this.handleChangeTab}
+          fullWidth
+          indicatorColor="primary"
+          textColor="primary"
         >
-          <Toolbar>
-            <Typography type="title" color="inherit">
-              Tweet Roller
-            </Typography>
-          </Toolbar>
-        </AppBar>
+          <Tab icon={PhoneIcon} />
+          <Tab icon={PhoneIcon} />
+          <Tab icon={PhoneIcon} />
+        </Tabs>
 
         <div style={{ paddingTop: 64 }}>
           <Tweet />
