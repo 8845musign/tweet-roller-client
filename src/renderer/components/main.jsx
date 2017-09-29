@@ -1,12 +1,24 @@
 import React, { Component } from 'React'
+import PropTypes from 'prop-types'
 import TwitterService from '../services/twitter'
 import Tabs, { Tab } from 'material-ui/Tabs'
-import PhoneIcon from 'material-ui-icons/Phone'
+import HomeIcon from 'material-ui-icons/Home'
+import SearchIcon from 'material-ui-icons/Search'
+import EmailIcon from 'material-ui-icons/Email'
+import NotificationsIcon from 'material-ui-icons/Notifications'
+import { withStyles } from 'material-ui/styles'
 
 import Tweet from './Tweet'
 import Timeline from './Timeline'
 
-export default class MainContent extends Component {
+const styles = {
+  scrollable: {
+    height: 'calc(100vh - 48px)',
+    overflowY: 'auto'
+  }
+}
+
+class MainContent extends Component {
   componentDidMount () {
     TwitterService.getHomeTimeline()
       .catch(error => {
@@ -55,21 +67,22 @@ export default class MainContent extends Component {
   }
 
   render () {
+    const { classes } = this.props
+
     return (
       <div>
         <Tabs
           value={this.state.tab}
           onChange={this.handleChangeTab}
           fullWidth
-          indicatorColor="primary"
-          textColor="primary"
         >
-          <Tab icon={PhoneIcon} />
-          <Tab icon={PhoneIcon} />
-          <Tab icon={PhoneIcon} />
+          <Tab icon={<HomeIcon />} />
+          <Tab icon={<SearchIcon />} />
+          <Tab icon={<NotificationsIcon />} />
+          <Tab icon={<EmailIcon />} />
         </Tabs>
 
-        <div style={{ paddingTop: 64 }}>
+        <div className={classes.scrollable}>
           <Tweet />
           <Timeline tweets={this.state.tweets} />
         </div>
@@ -77,3 +90,9 @@ export default class MainContent extends Component {
     )
   }
 }
+
+MainContent.PropTypes = {
+  classes: PropTypes.object.isRequired
+}
+
+export default withStyles(styles)(MainContent)

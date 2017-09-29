@@ -31,7 +31,8 @@ const linkifyOptions = {
 
 const styles = {
   root: {
-    padding: '0.5em 0.25em'
+    padding: '1em',
+    borderBottom: '1px solid #f5f5f5'
   },
   retweet: {
     paddingLeft: 48,
@@ -39,7 +40,6 @@ const styles = {
   },
   tweet: {
     display: 'flex',
-    borderBottom: '1px solid #f7f7f7',
     fontSize: 12,
     lineHeight: 1.5
   },
