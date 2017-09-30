@@ -10,6 +10,8 @@ import AppBar from 'material-ui/AppBar'
 import Button from 'material-ui/Button'
 import CreateIcon from 'material-ui-icons/Create'
 import { withStyles } from 'material-ui/styles'
+import { connect } from 'react-redux'
+import { addTweet, addTweets } from '../actions'
 
 import Timeline from './Timeline'
 import Tweet from './Tweet'
@@ -43,6 +45,8 @@ class MainContent extends Component {
         console.log(error)
       })
       .then(result => {
+        this.props.addTweets(result.data)
+
         this.setState({ tweets: result.data })
         this.connectStream()
       })
@@ -57,6 +61,8 @@ class MainContent extends Component {
 
     stream.on('tweet', tweet => {
       const { tweets } = this.state
+
+      this.props.addTweet(tweet)
 
       this.setState({
         tweets: [
@@ -130,7 +136,10 @@ class MainContent extends Component {
 
   render () {
     const { classes } = this.props
-    console.log(classes.btnTweet)
+
+    console.log('tweets')
+    console.log(this.props.tweets)
+
     return (
       <div>
         <AppBar>
@@ -169,7 +178,23 @@ class MainContent extends Component {
 }
 
 MainContent.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  tweets: PropTypes.array.isRequired,
+  addTweet: PropTypes.func.isRequired,
+  addTweets: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(MainContent)
+const styled = withStyles(styles)(MainContent)
+
+const mapStateToProps = state => {
+  return {
+    tweets: state.tweets
+  }
+}
+
+const mapDispatchToProps = {
+  addTweet,
+  addTweets
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(styled)
