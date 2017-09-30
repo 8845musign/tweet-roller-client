@@ -163,7 +163,7 @@ class MainContent extends Component {
           fab
           className={classes.btnTweet}
           color="accent"
-          arial-label="tweet"
+          aria-label="tweet"
           onClick={() => { this.handleBtnOpenTweet() }}
         >
           <CreateIcon />
