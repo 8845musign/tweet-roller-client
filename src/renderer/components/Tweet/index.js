@@ -12,6 +12,7 @@ import Typography from 'material-ui/Typography'
 import CloseIcon from 'material-ui-icons/Close'
 
 import TwitterService from '../../services/twitter'
+import Pomp from './Pomp'
 
 const styles = {
   root: {
@@ -25,32 +26,64 @@ class Tweet extends Component {
     super(props)
 
     this.state = {
-      value: ''
+      value: '',
+      isPomping: false,
+      pompCount: 0
     }
+
+    this.pomp = new Pomp(10)
 
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.handleClickPomp = this.handleClickPomp.bind(this)
   }
 
   handleKeyPress (e) {
     if (e.shiftKey && e.key === 'Enter') {
       e.preventDefault()
-
-      TwitterService.postTweet(this.state.value.trim())
-        .catch(error => console.log(error))
-        .then(
-          result => {
-            this.setState({ value: '' })
-            this.props.onClose()
-          }
-        )
+      this.Pomp()
     }
+  }
+
+  Pomp () {
+    this.pomp.init()
+
+    this.setState({
+      isPomping: true
+    })
+  }
+
+  tweet () {
+    TwitterService.postTweet(this.state.value.trim())
+      .catch(error => console.log(error))
+      .then(
+        result => {
+          this.setState({ value: '' })
+          this.props.onClose()
+        }
+      )
   }
 
   handleChange (e) {
     this.setState({
       value: e.target.value
     })
+  }
+
+  handleClickPomp () {
+    this.pomp.up()
+    this.setState({
+      pompCount: this.pomp.getCount()
+    })
+
+    if (this.pomp.isEnd()) {
+      this.tweet()
+      this.pomp.init()
+      this.setState({
+        isPomping: false,
+        pompCount: 0
+      })
+    }
   }
 
   render () {
@@ -92,12 +125,22 @@ class Tweet extends Component {
             value={this.state.value}
             onChange={this.handleChange}
             onKeyPress={this.handleKeyPress}
+            disabled={this.state.isPomping}
           />
 
           <FormHelperText>
             ( Shift + Enter ) {this.state.value.length} / 140
           </FormHelperText>
         </FormControl>
+
+        <div>
+          pomp {this.state.pompCount}
+          {
+            this.state.isPomping
+              ? <button type="button" onClick={this.handleClickPomp}>pomp</button>
+              : null
+          }
+        </div>
       </Dialog>
     )
   }
