@@ -6,15 +6,33 @@ import HomeIcon from 'material-ui-icons/Home'
 import SearchIcon from 'material-ui-icons/Search'
 import EmailIcon from 'material-ui-icons/Email'
 import NotificationsIcon from 'material-ui-icons/Notifications'
+import AppBar from 'material-ui/AppBar'
+import Button from 'material-ui/Button'
+import CreateIcon from 'material-ui-icons/Create'
 import { withStyles } from 'material-ui/styles'
 
-import Tweet from './Tweet'
 import Timeline from './Timeline'
+import Tweet from './Tweet'
+
+const TabContainer = (props) => {
+  return (
+    <div style={{ paddingTop: 48 }}>{ props.children }</div>
+  )
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.array
+  ]).isRequired
+}
 
 const styles = {
-  scrollable: {
-    height: 'calc(100vh - 48px)',
-    overflowY: 'auto'
+  btnTweet: {
+    position: 'fixed',
+    bottom: '1em',
+    right: '1em',
+    zIndex: 1000
   }
 }
 
@@ -55,43 +73,102 @@ class MainContent extends Component {
     })
   }
 
+  handleBtnOpenTweet () {
+    this.setState({
+      openTweet: true
+    })
+  }
+
+  handleBtnCloseTweet () {
+    this.setState({
+      openTweet: false
+    })
+  }
+
   constructor (props) {
     super(props)
 
     this.state = {
       tweets: [],
-      tab: 0
+      tab: 0,
+      openTweet: false
     }
 
     this.handleChangeTab = this.handleChangeTab.bind(this)
   }
 
+  renderTabContent () {
+    switch (this.state.tab) {
+      case 0:
+        return (
+          <TabContainer>
+            <Timeline tweets={this.state.tweets} />
+          </TabContainer>
+        )
+      case 1:
+        return (
+          <TabContainer>
+            検索
+          </TabContainer>
+        )
+      case 2:
+        return (
+          <TabContainer>
+            通知
+          </TabContainer>
+        )
+      case 3:
+        return (
+          <TabContainer>
+            DM
+          </TabContainer>
+        )
+      default:
+        return null
+    }
+  }
+
   render () {
     const { classes } = this.props
-
+    console.log(classes.btnTweet)
     return (
       <div>
-        <Tabs
-          value={this.state.tab}
-          onChange={this.handleChangeTab}
-          fullWidth
-        >
-          <Tab icon={<HomeIcon />} />
-          <Tab icon={<SearchIcon />} />
-          <Tab icon={<NotificationsIcon />} />
-          <Tab icon={<EmailIcon />} />
-        </Tabs>
+        <AppBar>
+          <Tabs
+            value={this.state.tab}
+            onChange={this.handleChangeTab}
+            fullWidth
+          >
+            <Tab icon={<HomeIcon />} />
+            <Tab icon={<SearchIcon />} />
+            <Tab icon={<NotificationsIcon />} />
+            <Tab icon={<EmailIcon />} />
+          </Tabs>
+        </AppBar>
 
-        <div className={classes.scrollable}>
-          <Tweet />
-          <Timeline tweets={this.state.tweets} />
+        <div>
+          {this.renderTabContent()}
         </div>
+
+        <Button
+          fab
+          className={classes.btnTweet}
+          color="accent"
+          arial-label="tweet"
+          onClick={() => { this.handleBtnOpenTweet() }}
+        >
+          <CreateIcon />
+        </Button>
+        <Tweet
+          open={this.state.openTweet}
+          onClose={() => { this.handleBtnCloseTweet() }}
+        />
       </div>
     )
   }
 }
 
-MainContent.PropTypes = {
+MainContent.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
