@@ -2,6 +2,7 @@ const gulp = require('gulp')
 const webpack = require('webpack-stream')
 const del = require('del')
 const runSequence = require('run-sequence')
+const electron = require('electron-connect').server.create()
 
 const distDir = 'dist'
 
@@ -22,6 +23,15 @@ gulp.task('clean', (done) => {
   })
 })
 
-gulp.task('build', () => {
-  runSequence('clean', 'scripts', 'html')
+gulp.task('build', (cb) => {
+  runSequence('clean', 'scripts', 'html', cb)
+})
+
+gulp.task('server-start', () => {
+  electron.start()
+  gulp.watch(['dist/**/*'], electron.reload)
+})
+
+gulp.task('serve', () => {
+  runSequence('build', 'server-start')
 })

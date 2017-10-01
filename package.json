@@ -2,9 +2,10 @@
   "name": "tweet-roller",
   "version": "0.0.1",
   "description": "need w",
-  "main": "app/javascripts/main/main.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "gulp build && electron dist/index.js"
+    "build": "gulp build && electron dist/index.js",
+    "serve": "gulp serve"
   },
   "repository": "https://github.com/8845musign/tweet-roller",
   "keywords": [
@@ -21,6 +22,7 @@
     "babel-preset-react": "^6.24.1",
     "del": "^3.0.0",
     "electron": "~1.6.2",
+    "electron-connect": "^0.6.2",
     "eslint": "^4.7.2",
     "eslint-config-react": "^1.1.7",
     "eslint-config-standard": "^10.2.1",
