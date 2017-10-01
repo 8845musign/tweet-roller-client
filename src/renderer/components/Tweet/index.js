@@ -26,7 +26,6 @@ class Tweet extends Component {
 
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    this.handleClickPomp = this.handleClickPomp.bind(this)
   }
 
   handleKeyPress (e) {
@@ -36,35 +35,8 @@ class Tweet extends Component {
     }
   }
 
-  tweet () {
-    TwitterService.postTweet(this.props.tweetValue.trim())
-      .catch(error => console.log(error))
-      .then(
-        result => {
-          this.setState({ value: '' })
-          this.props.closeTweet()
-        }
-      )
-  }
-
   handleChange (e) {
     this.props.editTweetValue(e.target.value)
-  }
-
-  handleClickPomp () {
-    this.pomp.up()
-    this.setState({
-      pompCount: this.pomp.getCount()
-    })
-
-    if (this.pomp.isEnd()) {
-      this.tweet()
-      this.pomp.init()
-      this.setState({
-        isPomping: false,
-        pompCount: 0
-      })
-    }
   }
 
   render () {
@@ -76,7 +48,6 @@ class Tweet extends Component {
 
     const { classes } = this.props
 
-    console.log('isOpenTweet', this.props.isOpenTweet)
     return (
       <Dialog
         fullScreen
