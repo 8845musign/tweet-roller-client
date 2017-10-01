@@ -1,8 +1,13 @@
-import Store, { thunk } from 'repatch'
+import Store from 'repatch'
+import { logger } from './middlewares'
 
 export default new Store({
   tab: 0,
   tweets: [],
   searchs: [],
-  notifycations: []
-})
+  notifycations: [],
+  tweetValue: '',
+  isOpenTweet: false,
+  isPomping: false,
+  pompCount: 0
+}).addMiddleware(logger)
