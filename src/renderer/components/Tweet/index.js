@@ -10,9 +10,8 @@ import IconButton from 'material-ui/IconButton'
 import Toolbar from 'material-ui/Toolbar'
 import Typography from 'material-ui/Typography'
 import CloseIcon from 'material-ui-icons/Close'
-
-import TwitterService from '../../services/twitter'
-import Pomp from './Pomp'
+import { connect } from 'react-redux'
+import { editTweetValue, startPomp, closeTweet, pomp } from '../../actions'
 
 const styles = {
   root: {
@@ -25,14 +24,6 @@ class Tweet extends Component {
   constructor (props) {
     super(props)
 
-    this.state = {
-      value: '',
-      isPomping: false,
-      pompCount: 0
-    }
-
-    this.pomp = new Pomp(10)
-
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleClickPomp = this.handleClickPomp.bind(this)
@@ -41,33 +32,23 @@ class Tweet extends Component {
   handleKeyPress (e) {
     if (e.shiftKey && e.key === 'Enter') {
       e.preventDefault()
-      this.Pomp()
+      this.props.startPomp()
     }
   }
 
-  Pomp () {
-    this.pomp.init()
-
-    this.setState({
-      isPomping: true
-    })
-  }
-
   tweet () {
-    TwitterService.postTweet(this.state.value.trim())
+    TwitterService.postTweet(this.props.tweetValue.trim())
       .catch(error => console.log(error))
       .then(
         result => {
           this.setState({ value: '' })
-          this.props.onClose()
+          this.props.closeTweet()
         }
       )
   }
 
   handleChange (e) {
-    this.setState({
-      value: e.target.value
-    })
+    this.props.editTweetValue(e.target.value)
   }
 
   handleClickPomp () {
@@ -88,22 +69,24 @@ class Tweet extends Component {
 
   render () {
     let error = false
-    if (this.state.value.length > 140) {
+
+    if (this.props.tweetValue.length > 140) {
       error = true
     }
 
     const { classes } = this.props
 
+    console.log('isOpenTweet', this.props.isOpenTweet)
     return (
       <Dialog
         fullScreen
-        open={this.props.open}
-        onRequestClose={this.props.onClose}
+        open={this.props.isOpenTweet}
+        onRequestClose={this.props.closeTweet}
         transition={<Slide direction="up" />}
       >
         <AppBar>
           <Toolbar>
-            <IconButton color="contrast" onClick={this.props.onClose} aria-label="Close">
+            <IconButton color="contrast" onClick={this.props.closeTweet} aria-label="Close">
               <CloseIcon />
             </IconButton>
             <Typography type="title" color="inherit">
@@ -122,22 +105,22 @@ class Tweet extends Component {
             label="Tweet"
             multiline
             rowsMax="4"
-            value={this.state.value}
+            value={this.props.tweetValue}
             onChange={this.handleChange}
             onKeyPress={this.handleKeyPress}
-            disabled={this.state.isPomping}
+            disabled={this.props.isPomping}
           />
 
           <FormHelperText>
-            ( Shift + Enter ) {this.state.value.length} / 140
+            ( Shift + Enter ) {this.props.tweetValue.length} / 140
           </FormHelperText>
         </FormControl>
 
         <div>
-          pomp {this.state.pompCount}
+          pomp {this.props.pompCount}
           {
-            this.state.isPomping
-              ? <button type="button" onClick={this.handleClickPomp}>pomp</button>
+            this.props.isPomping
+              ? <button type="button" onClick={this.props.pomp}>pomp</button>
               : null
           }
         </div>
@@ -147,9 +130,33 @@ class Tweet extends Component {
 }
 
 Tweet.propTypes = {
-  open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  classes: PropTypes.object
+  classes: PropTypes.object,
+  tweetValue: PropTypes.string.isRequired,
+  isPomping: PropTypes.bool.isRequired,
+  pompCount: PropTypes.number.isRequired,
+  editTweetValue: PropTypes.func.isRequired,
+  startPomp: PropTypes.func.isRequired,
+  pomp: PropTypes.func.isRequired,
+  closeTweet: PropTypes.func.isRequired,
+  isOpenTweet: PropTypes.bool.isRequired
 }
 
-export default withStyles(styles)(Tweet)
+const mapStateToProps = state => {
+  return {
+    tweetValue: state.tweetValue,
+    isPomping: state.isPomping,
+    pompCount: state.pompCount,
+    isOpenTweet: state.isOpenTweet
+  }
+}
+
+const mapDispatchToProps = {
+  editTweetValue,
+  startPomp,
+  pomp,
+  closeTweet
+}
+
+const styled = withStyles(styles)(Tweet)
+
+export default connect(mapStateToProps, mapDispatchToProps)(styled)

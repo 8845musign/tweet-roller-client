@@ -11,7 +11,7 @@ import Button from 'material-ui/Button'
 import CreateIcon from 'material-ui-icons/Create'
 import { withStyles } from 'material-ui/styles'
 import { connect } from 'react-redux'
-import { addTweet, addTweets } from '../actions'
+import { addTweet, addTweets, openTweet } from '../actions'
 
 import Timeline from './Timeline'
 import Tweet from './Tweet'
@@ -60,16 +60,7 @@ class MainContent extends Component {
     })
 
     stream.on('tweet', tweet => {
-      const { tweets } = this.state
-
       this.props.addTweet(tweet)
-
-      this.setState({
-        tweets: [
-          tweet,
-          ...tweets
-        ]
-      })
     })
   }
 
@@ -79,25 +70,11 @@ class MainContent extends Component {
     })
   }
 
-  handleBtnOpenTweet () {
-    this.setState({
-      openTweet: true
-    })
-  }
-
-  handleBtnCloseTweet () {
-    this.setState({
-      openTweet: false
-    })
-  }
-
   constructor (props) {
     super(props)
 
     this.state = {
-      tweets: [],
-      tab: 0,
-      openTweet: false
+      tab: 0
     }
 
     this.handleChangeTab = this.handleChangeTab.bind(this)
@@ -108,7 +85,7 @@ class MainContent extends Component {
       case 0:
         return (
           <TabContainer>
-            <Timeline tweets={this.state.tweets} />
+            <Timeline tweets={this.props.tweets} />
           </TabContainer>
         )
       case 1:
@@ -137,9 +114,6 @@ class MainContent extends Component {
   render () {
     const { classes } = this.props
 
-    console.log('tweets')
-    console.log(this.props.tweets)
-
     return (
       <div>
         <AppBar>
@@ -164,14 +138,11 @@ class MainContent extends Component {
           className={classes.btnTweet}
           color="accent"
           aria-label="tweet"
-          onClick={() => { this.handleBtnOpenTweet() }}
+          onClick={this.props.openTweet}
         >
           <CreateIcon />
         </Button>
-        <Tweet
-          open={this.state.openTweet}
-          onClose={() => { this.handleBtnCloseTweet() }}
-        />
+        <Tweet />
       </div>
     )
   }
@@ -181,7 +152,8 @@ MainContent.propTypes = {
   classes: PropTypes.object.isRequired,
   tweets: PropTypes.array.isRequired,
   addTweet: PropTypes.func.isRequired,
-  addTweets: PropTypes.func.isRequired
+  addTweets: PropTypes.func.isRequired,
+  openTweet: PropTypes.func.isRequired
 }
 
 const styled = withStyles(styles)(MainContent)
@@ -194,7 +166,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   addTweet,
-  addTweets
+  addTweets,
+  openTweet
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(styled)

@@ -1,6 +1,8 @@
+import TwitterService from './services/twitter'
+
 export const addTweets = tweets => state => {
   return Object.assign({},
-    ...state,
+    state,
     { tweets: [
       ...tweets,
       ...state.tweets
@@ -10,10 +12,72 @@ export const addTweets = tweets => state => {
 
 export const addTweet = tweet => state => {
   return Object.assign({},
-    ...state,
+    state,
     { tweets: [
       tweet,
       ...state.tweets
     ]}
   )
+}
+
+export const openTweet = _ => state => {
+  return Object.assign({},
+    state,
+    { isOpenTweet: true }
+  )
+}
+
+export const closeTweet = _ => state => {
+  return Object.assign({},
+    state,
+    { isOpenTweet: false }
+  )
+}
+
+export const editTweetValue = value => state => {
+  return Object.assign({},
+    state,
+    { tweetValue: value }
+  )
+}
+
+export const startPomp = _ => state => {
+  return Object.assign({},
+    state,
+    {
+      isPomping: true,
+      pompCount: 0,
+      openTweet: false
+    }
+  )
+}
+
+export const endPomp = state => {
+  TwitterService.postTweet(state.tweetValue.trim())
+    .catch(error => console.log(error))
+
+  return Object.assign({},
+    state,
+    {
+      isPomping: false,
+      pompCount: 0,
+      isOpenTweet: false,
+      tweetValue: ''
+    }
+  )
+}
+
+export const pompUp = state => {
+  return Object.assign({},
+    state,
+    { pompCount: ++state.pompCount }
+  )
+}
+
+export const pomp = _ => state => {
+  if (state.isPomping && state.pompCount < 9) {
+    return pompUp(state)
+  } else {
+    return endPomp(state)
+  }
 }

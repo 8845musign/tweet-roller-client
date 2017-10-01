@@ -132,7 +132,7 @@ class Tweet extends Component {
             </div>
 
             <div>
-              <ToolButton aria-label="reply" size={17}>
+              <ToolButton ariaLabel="reply" size={17}>
               chat_bubble_outline
               </ToolButton>
 
@@ -148,8 +148,8 @@ class Tweet extends Component {
 }
 
 Tweet.propTypes = {
-  tweets: PropTypes.array.isRequired,
-  classes: PropTypes.string.isRequired
+  tweet: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 }
 
 export default withStyles(styles)(Tweet)
