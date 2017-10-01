@@ -11,9 +11,15 @@ gulp.task('html', () => {
     .pipe(gulp.dest(`${distDir}/renderer`))
 })
 
+let watch = false
 gulp.task('scripts', () => {
+  let config = require('./webpack.config.js')
+  if (watch) {
+    config = Object.assign({ watch: true }, config)
+  }
+
   return gulp.src(['src/app.js', 'src/renderer/app.js'])
-    .pipe(webpack({ config: require('./webpack.config.js') }))
+    .pipe(webpack(config))
     .pipe(gulp.dest(`${distDir}/`))
 })
 
@@ -24,7 +30,7 @@ gulp.task('clean', (done) => {
 })
 
 gulp.task('build', (cb) => {
-  runSequence('clean', 'scripts', 'html', cb)
+  runSequence('clean', 'html', 'scripts', cb)
 })
 
 gulp.task('server-start', () => {
@@ -33,5 +39,6 @@ gulp.task('server-start', () => {
 })
 
 gulp.task('serve', () => {
-  runSequence('build', 'server-start')
+  watch = true
+  runSequence('server-start', 'html', 'scripts')
 })

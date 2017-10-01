@@ -7,6 +7,7 @@ Need w
 ```
 yarn
 npm run build
+npm run serve
 ```
 
 # config

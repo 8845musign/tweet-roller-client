@@ -2,9 +2,10 @@
   "name": "tweet-roller",
   "version": "0.0.1",
   "description": "need w",
-  "main": "dist/index.js",
+  "main": "dist/main.js",
   "scripts": {
-    "build": "gulp build && electron dist/index.js",
+    "start": "electron .",
+    "build": "gulp build",
     "serve": "gulp serve"
   },
   "repository": "https://github.com/8845musign/tweet-roller",
