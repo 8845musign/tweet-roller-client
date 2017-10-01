@@ -30,7 +30,7 @@ export default class ToolButton extends React.Component {
 }
 
 ToolButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   ariaLabel: PropTypes.string.isRequired,
   children: PropTypes.string.isRequired,
   size: PropTypes.number
