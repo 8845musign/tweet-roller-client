@@ -1,7 +1,7 @@
 const gulp = require('gulp')
 const webpack = require('webpack-stream')
 const del = require('del')
-const runSequence = require('run-sequence');
+const runSequence = require('run-sequence')
 
 const distDir = 'dist'
 
@@ -13,7 +13,7 @@ gulp.task('html', () => {
 gulp.task('scripts', () => {
   return gulp.src(['src/app.js', 'src/renderer/app.js'])
     .pipe(webpack({ config: require('./webpack.config.js') }))
-    .pipe(gulp.dest(`${distDir}/`));
+    .pipe(gulp.dest(`${distDir}/`))
 })
 
 gulp.task('clean', (done) => {
