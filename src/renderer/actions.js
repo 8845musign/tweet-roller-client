@@ -52,7 +52,7 @@ export const startPomp = _ => state => {
   )
 }
 
-export const endPomp = state => {
+const endPomp = state => {
   TwitterService.postTweet(state.tweetValue.trim())
     .catch(error => console.log(error))
 
@@ -67,7 +67,7 @@ export const endPomp = state => {
   )
 }
 
-export const pompUp = state => {
+const pompUp = state => {
   return Object.assign({},
     state,
     { pompCount: ++state.pompCount }
@@ -77,7 +77,12 @@ export const pompUp = state => {
 export const pomp = _ => state => {
   if (state.isPomping && state.pompCount < 9) {
     return pompUp(state)
-  } else {
+  }
+
+  if (state.isPomping && state.pompCount >= 9) {
     return endPomp(state)
   }
+
+  // when no pomping, nothing do.
+  return state
 }

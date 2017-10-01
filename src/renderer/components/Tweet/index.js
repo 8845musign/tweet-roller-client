@@ -12,6 +12,7 @@ import Typography from 'material-ui/Typography'
 import CloseIcon from 'material-ui-icons/Close'
 import { connect } from 'react-redux'
 import { editTweetValue, startPomp, closeTweet, pomp } from '../../actions'
+import io from 'socket.io-client'
 
 const styles = {
   root: {
@@ -26,6 +27,24 @@ class Tweet extends Component {
 
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleChange = this.handleChange.bind(this)
+  }
+
+  componentDidMount () {
+    if (process.env.SERVER) {
+      this.socket = io(process.env.SERVER)
+      this.socket.on('pomp', () => {
+        this.props.pomp()
+      })
+    } else {
+      this.socket = null
+    }
+  }
+
+  componentWillUnmount () {
+    if (this.socket) {
+      this.socket.disconnect()
+      this.socket = null
+    }
   }
 
   handleKeyPress (e) {
