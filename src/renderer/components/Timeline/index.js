@@ -1,8 +1,8 @@
 import React, { Component } from 'React'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { addTweet, addTweets } from '../../../actions'
-import TwitterService from '../../../services/twitter'
+import { addTweet, addTweets } from '../../actions'
+import TwitterService from '../../services/twitter'
 import List from './List'
 
 class Timeline extends Component {
