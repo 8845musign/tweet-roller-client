@@ -1,9 +1,9 @@
 import React, { Component } from 'React'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { addTweet, addTweets } from '../../actions'
-import TwitterService from '../../services/twitter'
-import List from './List'
+import { addTweet, addTweets } from '../actions'
+import TwitterService from '../services/twitter'
+import TweetList from './TweetList'
 
 class Timeline extends Component {
   componentDidMount () {
@@ -33,7 +33,7 @@ class Timeline extends Component {
 
   render () {
     return (
-      <List
+      <TweetList
         tweets={this.props.tweets}
       />
     )
