@@ -1,22 +1,60 @@
 import React, { Component } from 'React'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { addTweet, addTweets } from '../../../actions'
+import TwitterService from '../../../services/twitter'
+import List from './List'
 
-import Tweet from './Tweet'
+class Timeline extends Component {
+  componentDidMount () {
+    TwitterService.getHomeTimeline()
+      .catch(error => {
+        console.log(error)
+      })
+      .then(result => {
+        this.props.addTweets(result.data)
 
-export default class Timeline extends Component {
-  render () {
-    const tweets = this.props.tweets.map((tweet) => {
-      return <Tweet tweet={tweet} key={tweet.id} />
+        this.setState({ tweets: result.data })
+        this.connectStream()
+      })
+  }
+
+  connectStream () {
+    this.stream = TwitterService.connectStreamUser()
+
+    this.stream.on('error', error => {
+      throw error
     })
 
+    this.stream.on('tweet', tweet => {
+      this.props.addTweet(tweet)
+    })
+  }
+
+  render () {
     return (
-      <div>
-        {tweets}
-      </div>
+      <List
+        tweets={this.props.tweets}
+      />
     )
   }
 }
 
 Timeline.propTypes = {
-  tweets: PropTypes.array.isRequired
+  tweets: PropTypes.array.isRequired,
+  addTweet: PropTypes.func.isRequired,
+  addTweets: PropTypes.func.isRequired
 }
+
+const mapStateToProps = state => {
+  return {
+    tweets: state.tweets
+  }
+}
+
+const mapDispatchToProps = {
+  addTweet,
+  addTweets
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Timeline)

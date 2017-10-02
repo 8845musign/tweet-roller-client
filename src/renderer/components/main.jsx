@@ -1,6 +1,5 @@
 import React, { Component } from 'React'
 import PropTypes from 'prop-types'
-import TwitterService from '../services/twitter'
 import Tabs, { Tab } from 'material-ui/Tabs'
 import HomeIcon from 'material-ui-icons/Home'
 import SearchIcon from 'material-ui-icons/Search'
@@ -11,7 +10,7 @@ import Button from 'material-ui/Button'
 import CreateIcon from 'material-ui-icons/Create'
 import { withStyles } from 'material-ui/styles'
 import { connect } from 'react-redux'
-import { addTweet, addTweets, openTweet } from '../actions'
+import { openTweet } from '../actions'
 
 import Timeline from './Timeline'
 import Tweet from './Tweet'
@@ -39,31 +38,6 @@ const styles = {
 }
 
 class MainContent extends Component {
-  componentDidMount () {
-    TwitterService.getHomeTimeline()
-      .catch(error => {
-        console.log(error)
-      })
-      .then(result => {
-        this.props.addTweets(result.data)
-
-        this.setState({ tweets: result.data })
-        this.connectStream()
-      })
-  }
-
-  connectStream () {
-    const stream = TwitterService.connectStreamUser()
-
-    stream.on('error', error => {
-      throw error
-    })
-
-    stream.on('tweet', tweet => {
-      this.props.addTweet(tweet)
-    })
-  }
-
   handleChangeTab (event, value) {
     this.setState({
       tab: value
@@ -85,7 +59,7 @@ class MainContent extends Component {
       case 0:
         return (
           <TabContainer>
-            <Timeline tweets={this.props.tweets} />
+            <Timeline />
           </TabContainer>
         )
       case 1:
@@ -151,23 +125,13 @@ class MainContent extends Component {
 MainContent.propTypes = {
   classes: PropTypes.object.isRequired,
   tweets: PropTypes.array.isRequired,
-  addTweet: PropTypes.func.isRequired,
-  addTweets: PropTypes.func.isRequired,
   openTweet: PropTypes.func.isRequired
 }
 
 const styled = withStyles(styles)(MainContent)
 
-const mapStateToProps = state => {
-  return {
-    tweets: state.tweets
-  }
-}
-
 const mapDispatchToProps = {
-  addTweet,
-  addTweets,
   openTweet
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(styled)
+export default connect(null, mapDispatchToProps)(styled)
