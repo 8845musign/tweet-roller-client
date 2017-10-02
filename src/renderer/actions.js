@@ -1,12 +1,21 @@
 import TwitterService from './services/twitter'
 
+const isDuplicate = (tweet, ids) => {
+  return ids.includes(tweet.id)
+}
+
 export const addTweets = tweets => state => {
+  const teetsUnique = tweets.filter(tweet => {
+    return !isDuplicate(tweet, state.tweetIds)
+  })
+  const ids = teetsUnique.map(tweet => tweet.id)
+
   return Object.assign({},
     state,
-    { tweets: [
-      ...tweets,
-      ...state.tweets
-    ]}
+    {
+      tweets: [ ...teetsUnique, ...state.tweets ],
+      tweetIds: [ ...ids, ...state.tweetIds ]
+    }
   )
 }
 
