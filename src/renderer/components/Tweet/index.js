@@ -18,6 +18,20 @@ const styles = {
   root: {
     width: '100%',
     marginBottom: 20
+  },
+  pomp: {
+    color: '#333',
+    textAlign: 'center'
+  },
+  pompHeading: {
+    paddingTop: '0.5em',
+    fontSize: '3rem'
+  },
+  pompCount: {
+    paddingTop: '0.25em',
+    marginBottom: '0.5em',
+    fontSize: '10rem',
+    fontStyle: 'italic'
   }
 }
 
@@ -56,6 +70,22 @@ class Tweet extends Component {
 
   handleChange (e) {
     this.props.editTweetValue(e.target.value)
+  }
+
+  renderPomp () {
+    if (!this.props.isPomping) return null
+
+    const { classes } = this.props
+
+    return (
+      <div className={classes.pomp}>
+        <div className={classes.pompHeading}>ROLL</div>
+
+        <div className={classes.pompCount}>{this.props.pompCount}</div>
+
+        <button className={classes.pompButton} type="button" onClick={this.props.pomp}>pomp</button>
+      </div>
+    )
   }
 
   render () {
@@ -106,14 +136,7 @@ class Tweet extends Component {
           </FormHelperText>
         </FormControl>
 
-        <div>
-          pomp {this.props.pompCount}
-          {
-            this.props.isPomping
-              ? <button type="button" onClick={this.props.pomp}>pomp</button>
-              : null
-          }
-        </div>
+        {this.renderPomp()}
       </Dialog>
     )
   }
