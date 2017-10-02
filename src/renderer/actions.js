@@ -4,28 +4,28 @@ const isDuplicate = (tweet, ids) => {
   return ids.includes(tweet.id)
 }
 
-export const addTweets = tweets => state => {
-  const teetsUnique = tweets.filter(tweet => {
-    return !isDuplicate(tweet, state.tweetIds)
+export const addTweets = (tweets, target = 'tweet') => state => {
+  const tweetsUnique = tweets.filter(tweet => {
+    return !isDuplicate(tweet, state[`${target}Ids`])
   })
-  const ids = teetsUnique.map(tweet => tweet.id)
+  const ids = tweetsUnique.map(tweet => tweet.id)
 
   return Object.assign({},
     state,
     {
-      tweets: [ ...teetsUnique, ...state.tweets ],
-      tweetIds: [ ...ids, ...state.tweetIds ]
+      [`${target}s`]: [ ...tweetsUnique, ...state[`${target}s`] ],
+      [`${target}Ids`]: [ ...ids, ...state[`${target}Ids`] ]
     }
   )
 }
 
-export const addTweet = tweet => state => {
+export const addTweet = (tweet, target = 'tweet') => state => {
   return Object.assign({},
     state,
-    { tweets: [
-      tweet,
-      ...state.tweets
-    ]}
+    {
+      [`${target}s`]: [ tweet, ...state[`${target}s`] ],
+      [`${target}Ids`]: [ tweet.id, ...state[`${target}Ids`] ]
+    }
   )
 }
 
