@@ -13,6 +13,7 @@ import { connect } from 'react-redux'
 import { openTweet } from '../actions'
 
 import Timeline from './Timeline'
+import Searchs from './Searchs'
 import Tweet from './Tweet'
 
 const TabContainer = (props) => {
@@ -65,7 +66,7 @@ class MainContent extends Component {
       case 1:
         return (
           <TabContainer>
-            検索
+            <Searchs />
           </TabContainer>
         )
       case 2:

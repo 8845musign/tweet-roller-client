@@ -14,6 +14,10 @@ class TwitterService {
     return this.twit.get('statuses/home_timeline')
   }
 
+  getSearchTimeline (q = '#フロントエンドゆるふわ筋トレ部') {
+    return this.twit.get('search/tweets', { q })
+  }
+
   connectStreamUser () {
     return this.twit.stream('user')
   }
