@@ -11,5 +11,6 @@ export default new Store({
   tweetValue: '',
   isOpenTweet: false,
   isPomping: false,
+  pompMax: 10,
   pompCount: 0
 }).addMiddleware(logger)

@@ -84,14 +84,21 @@ const pompUp = state => {
 }
 
 export const pomp = _ => state => {
-  if (state.isPomping && state.pompCount < 9) {
+  if (state.isPomping && state.pompCount < state.pompMax) {
     return pompUp(state)
   }
 
-  if (state.isPomping && state.pompCount >= 9) {
+  if (state.isPomping && state.pompCount >= state.pompMax) {
     return endPomp(state)
   }
 
   // when no pomping, nothing do.
   return state
+}
+
+export const setPompMax = max => state => {
+  return Object.assign({},
+    state,
+    { pompMax: max }
+  )
 }
